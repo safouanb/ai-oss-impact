@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data — too large for git, stored locally
+data/raw/
+data/processed/
+
+# References — copyrighted papers, not for distribution
+references/
+
+# Local working files
+thesis_proposal.md
+pdf_to_md.py
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Misc
+*.log
+*.tmp
