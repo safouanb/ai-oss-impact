@@ -1,0 +1,13 @@
+pymupdf
+requests
+pandas
+numpy
+radon
+gitpython
+PyGithub
+tqdm
+jupyter
+matplotlib
+seaborn
+python-dotenv
+scikit-learn
