@@ -1,67 +1,83 @@
-# When Code Becomes Cheap
+# AI OSS Impact
 
-## Is AI Disrupting Open Source Through Technical Debt and Security Risk?
+[![Research](https://img.shields.io/badge/Research-MSc%20Thesis-black)](./thesis_proposal.md)
+[![Status](https://img.shields.io/badge/Status-Active%20Development-0a7d34)](#project-status)
+[![Method](https://img.shields.io/badge/Method-Mixed%20Methods-1f6feb)](#study-design)
+[![Reproducibility](https://img.shields.io/badge/Reproducibility-Protocol%20Driven-6f42c1)](./docs/case_selection_protocol.md)
 
-A mixed-methods MSc thesis project on AI-generated code, software quality, and vulnerability outcomes in mature open-source ecosystems.
+> **When code gets cheaper, what gets more expensive?**  
+> This project studies whether AI-assisted open-source contributions are linked to technical debt growth, review pressure, and security outcomes.
 
-**Author:** Safouan Bolbaroud
-**Program:** MSc Business Information Technology Management, University of Amsterdam  
+## About
+
+This repository contains the full research workflow for an MSc thesis at the University of Amsterdam.
+
+**Author:** Safouan Bolbaroud  
+**Program:** MSc Business Information Technology Management  
 **Supervisor:** Chintan Amrit
 
-## Thesis At A Glance
+## Research Focus
 
-| Item | Value |
+| Dimension | Question |
 |---|---|
-| Core question | Does growth in AI-assisted OSS contribution volume relate to measurable debt and security outcomes? |
-| Study design | Two-case mixed-methods study (quantitative + qualitative) |
-| Time window | 2018-2026 (pre-AI vs post-AI comparison) |
-| Quantitative focus | AI-detection prevalence, debt/quality metrics, CVE commit tracing |
-| Qualitative focus | PR/issue/release discourse on review burden, quality, and security |
+| RQ1 Detection | How much AI-generated contribution can be detected, and how does it evolve over time? |
+| RQ2 Technical debt | Do AI-flagged contributions show different debt/quality signatures than human-authored ones? |
+| RQ3 Security | Can documented CVEs be traced to contribution/review pathways involving AI-flagged code? |
+| RQ4 Developer perspective | How do maintainers describe AI impact on review burden, quality control, and security? |
 
-## Why This Matters
+## Why This Is Interesting
 
-Recent empirical work shows a repeating pattern: AI coding tools can increase short-term throughput, while complexity and warning burden can persist.  
-This project tests whether that pattern translates into security-relevant outcomes in real, high-impact repositories.
+Most existing studies show velocity/quality trade-offs at scale.  
+This study pushes deeper into **security traceability** and **maintainer discourse**, with a case-study design aimed at publishable empirical evidence.
 
-## Research Questions
+## Study Design
 
-1. **RQ1 (Detection)**: To what extent are AI-generated contributions identifiable in selected projects, and what is their prevalence over time?
-2. **RQ2 (Technical Debt)**: How do technical debt and code quality indicators evolve after widespread AI tool adoption, and how do AI-flagged contributions compare with human-authored ones?
-3. **RQ3 (Security)**: Is there a traceable relationship between AI-flagged contributions and documented vulnerabilities (CVEs)?
-4. **RQ4 (Developer Perspective)**: How do maintainers and contributors describe AI-related effects on quality, review load, and security?
+Three connected phases:
 
-## Method Overview
+1. **AI contribution detection**
+   - [AIDev](https://huggingface.co/datasets/hao-li/AIDev)-aligned marker strategy + supplementary heuristics.
+   - Confidence-tier labels + validation sample.
+2. **Quantitative debt/security analysis**
+   - Pre-AI vs post-AI trends.
+   - AI-flagged vs human-authored comparisons.
+   - CVE-to-commit/review tracing.
+3. **Qualitative discourse mining**
+   - PR, issue, and release-note evidence on review strain, governance, and risk handling.
 
-### Phase 1: AI contribution detection
-- Use AIDev-aligned markers and supplementary heuristics.
-- Build commit/PR labels with confidence tiers and validation samples.
+Core external dataset and references:
 
-### Phase 2: Quantitative debt and Security analysis
-- Compare pre-AI and post-AI metric trends.
-- Compare AI-flagged vs human-authored changes.
-- Trace CVE timelines to commits and review trails.
+1. [AIDev dataset](https://huggingface.co/datasets/hao-li/AIDev)
+2. [AIDev paper](https://arxiv.org/abs/2507.15003)
+3. [AIDev replication package](https://github.com/SAILResearch/AI_Teammates_in_SE3)
 
-### Phase 3: Qualitative evidence
-- Mine project discourse from PRs/issues/release notes.
-- Identify themes around review strain, governance, and security practice.
+## Case Selection Integrity
 
-## Case selection policy
+Prescanning is used for **feasibility**, not result fishing.
 
-Prescanning is used only for **feasibility** and **inclusion criteria**, not for fishing desirable results.  
+1. Selection uses ex-ante criteria (detectability, security traceability, maturity, discourse volume).
+2. Criteria are frozen before confirmatory analysis.
+3. Rejected candidates and decisions are retained.
 
-- Full protocol: [`docs/case_selection_protocol.md`](docs/case_selection_protocol.md)
-- Guardrails:
-  - No outcome-based cherry-picking.
-  - Criteria are frozen before main hypothesis testing.
-  - Full scan logs and rejected candidates are retained.
+Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.md)
 
-## Repository structure
+## Project Status
+
+| Workstream | Status |
+|---|---|
+| Literature base | In progress |
+| Case selection protocol | Complete |
+| Data pipeline scaffolding | In progress |
+| Detection baseline scripts | Complete |
+| Quant + CVE tracing scripts | In progress |
+| Thesis chapter drafts | In progress |
+
+## Repository Map
 
 ```text
 .
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── raw/                 # Source data pulls
+│   └── processed/           # Cleaned and labeled outputs
 ├── docs/
 │   ├── 01_introduction.md
 │   ├── 02_literature_review.md
@@ -70,7 +86,7 @@ Prescanning is used only for **feasibility** and **inclusion criteria**, not for
 │   ├── 05_discussion.md
 │   ├── 06_conclusion.md
 │   └── case_selection_protocol.md
-├── references/
+├── references/              # Extracted source papers/reports
 ├── results/
 │   ├── figures/
 │   └── tables/
@@ -85,18 +101,18 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Optional first run:
+Example data pull and baseline labeling:
 
 ```bash
 python scripts/fetch_github_data.py --repo facebook/react --since 2018-01-01 --until 2026-03-01
 python scripts/detect_ai_contributions.py --repo facebook/react
 ```
 
-## Quality bar
+## Quality Bar
 
-This project is built with publication readiness in mind:
+This repository is run as publication-oriented research:
 
-1. Reproducible scripts for all tables/figures.
+1. Reproducible code paths for all tables/figures.
 2. Explicit validity threats and robustness checks.
-3. Clear separation between exploratory prescan and confirmatory analysis.
-4. Open methodological traceability for case selection and labeling decisions.
+3. Clear exploratory (prescan) vs confirmatory (hypothesis test) separation.
+4. Transparent protocol and decision trail.
