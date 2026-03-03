@@ -1,12 +1,12 @@
-# AI OSS Impact
+# When Code Gets Cheap, Who Pays the Debt?
+*From Prompt to Patch to Breach in Open Source Security*
 
 [![Research](https://img.shields.io/badge/Research-MSc%20Thesis-black)](./thesis_proposal.md)
 [![Status](https://img.shields.io/badge/Status-Active%20Development-0a7d34)](#project-status)
 [![Method](https://img.shields.io/badge/Method-Mixed%20Methods-1f6feb)](#study-design)
 [![Reproducibility](https://img.shields.io/badge/Reproducibility-Protocol%20Driven-6f42c1)](./docs/case_selection_protocol.md)
 
-> **When code gets cheaper, what gets more expensive?**  
-> This project studies whether AI-assisted open-source contributions are linked to technical debt growth, review pressure, and security outcomes.
+> This project studies whether AI-assisted open-source contributions are linked to technical debt growth, review burden, and security outcomes.
 
 ## About
 
@@ -16,21 +16,21 @@ This repository contains the full research workflow for an MSc thesis at the Uni
 **Program:** MSc Business Information Technology Management  
 **Supervisor:** Chintan Amrit
 
-## Research Focus
+## Research focus
 
 | Dimension | Question |
 |---|---|
 | RQ1 Detection | How much AI-generated contribution can be detected, and how does it evolve over time? |
-| RQ2 Technical debt | Do AI-flagged contributions show different debt/quality signatures than human-authored ones? |
+| RQ2 Technical Debt | Do AI-flagged contributions show different debt/quality signatures than human-authored ones? |
 | RQ3 Security | Can documented CVEs be traced to contribution/review pathways involving AI-flagged code? |
-| RQ4 Developer perspective | How do maintainers describe AI impact on review burden, quality control, and security? |
+| RQ4 Developer Perspective | How do maintainers describe AI impact on review burden, quality control, and security? |
 
-## Why This Is Interesting
+## Why this is interesting
 
 Most existing studies show velocity/quality trade-offs at scale.  
 This study pushes deeper into **security traceability** and **maintainer discourse**, with a case-study design aimed at publishable empirical evidence.
 
-## Study Design
+## Study design
 
 Three connected phases:
 
@@ -50,7 +50,7 @@ Core external dataset and references:
 2. [AIDev paper](https://arxiv.org/abs/2507.15003)
 3. [AIDev replication package](https://github.com/SAILResearch/AI_Teammates_in_SE3)
 
-## Case Selection Integrity
+## Case selection integrity
 
 Prescanning is used for **feasibility**, not result fishing.
 
@@ -60,7 +60,7 @@ Prescanning is used for **feasibility**, not result fishing.
 
 Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.md)
 
-## Project Status
+## Project status
 
 | Workstream | Status |
 |---|---|
@@ -71,7 +71,7 @@ Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.
 | Quant + CVE tracing scripts | In progress |
 | Thesis chapter drafts | In progress |
 
-## Repository Map
+## Repository map
 
 ```text
 .
@@ -93,7 +93,7 @@ Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.
 └── scripts/
 ```
 
-## Quick Start
+## Quick start
 
 ```bash
 python3 -m venv venv
@@ -108,7 +108,7 @@ python scripts/fetch_github_data.py --repo facebook/react --since 2018-01-01 --u
 python scripts/detect_ai_contributions.py --repo facebook/react
 ```
 
-## Quality Bar
+## Quality bar
 
 This repository is run as publication-oriented research:
 
@@ -116,3 +116,11 @@ This repository is run as publication-oriented research:
 2. Explicit validity threats and robustness checks.
 3. Clear exploratory (prescan) vs confirmatory (hypothesis test) separation.
 4. Transparent protocol and decision trail.
+
+## GitHub sidebar setup
+
+Set this manually in the repository "About" panel:
+
+- **Description:** `Mixed-methods research on AI-assisted OSS contributions, technical debt, and CVE-linked security traceability.`
+- **Website:** use your thesis/project link when available.
+- **Topics:** `software-engineering`, `open-source`, `ai-code`, `technical-debt`, `software-security`, `cve`, `empirical-research`, `mining-software-repositories`
