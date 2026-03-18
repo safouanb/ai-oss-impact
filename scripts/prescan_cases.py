@@ -358,6 +358,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-md", type=Path, default=DEFAULT_MD)
     parser.add_argument("--out-fig", type=Path, default=DEFAULT_FIG)
     parser.add_argument("--sleep-seconds", type=float, default=None)
+    parser.add_argument(
+        "--allow-no-token",
+        action="store_true",
+        help="Allow unauthenticated GitHub API access. This is slow and likely to hit rate limits.",
+    )
     return parser.parse_args()
 
 
@@ -365,6 +370,11 @@ def main() -> None:
     args = parse_args()
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
+        if not args.allow_no_token:
+            raise SystemExit(
+                "GITHUB_TOKEN is required for a full prescan. "
+                "Set it in the environment or rerun with --allow-no-token for a slow, rate-limited run."
+            )
         print("warning: GITHUB_TOKEN not set; GitHub Search API will be slow and heavily rate-limited.")
 
     repos = load_repos(args.repos)
@@ -372,7 +382,18 @@ def main() -> None:
         raise SystemExit(f"no repositories found in {args.repos}")
 
     client = GitHubClient(token=token, sleep_seconds=args.sleep_seconds)
-    rows = [collect_repo(client, repo) for repo in repos]
+    rows: list[RepoPrescan] = []
+    total = len(repos)
+    for idx, repo in enumerate(repos, start=1):
+        print(f"[{idx}/{total}] collecting {repo} ...", flush=True)
+        row = collect_repo(client, repo)
+        rows.append(row)
+        print(
+            f"[{idx}/{total}] {repo}: ai_markers={row.ai_markers_total}, "
+            f"advisories={row.advisories_total}, prs={row.pr_count}, issues={row.issue_count}",
+            flush=True,
+        )
+
     apply_scoring(rows)
     write_csv(rows, args.out_csv)
     write_markdown(rows, args.out_md, args.repos)
