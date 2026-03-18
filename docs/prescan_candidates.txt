@@ -1,0 +1,19 @@
+# Broad candidate set for repository prescan.
+# One repository per line. Comments and blank lines are ignored.
+
+microsoft/vscode
+vercel/next.js
+n8n-io/n8n
+home-assistant/core
+pytorch/pytorch
+python/cpython
+facebook/react
+kubernetes/kubernetes
+nodejs/node
+rust-lang/rust
+tensorflow/tensorflow
+golang/go
+apache/kafka
+supabase/supabase
+langchain-ai/langchain
+open-webui/open-webui

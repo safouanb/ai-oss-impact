@@ -60,6 +60,8 @@ Prescanning is used for **feasibility**, not result fishing.
 
 Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.md)
 
+Prescan workflow: [docs/prescan_pipeline.md](./docs/prescan_pipeline.md)
+
 ## Project status
 
 | Workstream | Status |
@@ -99,6 +101,17 @@ Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+Run the repository prescan:
+
+```bash
+export GITHUB_TOKEN=your_token_here
+python scripts/prescan_cases.py \
+  --repos docs/prescan_candidates.txt \
+  --out-csv results/tables/case_prescan.csv \
+  --out-md results/tables/case_prescan.md \
+  --out-fig results/figures/case_prescan_scores.png
 ```
 
 Example data pull and baseline labeling:
