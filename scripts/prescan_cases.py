@@ -48,6 +48,22 @@ AI_MARKERS = (
 )
 
 
+def load_dotenv(path: Path = Path(".env")) -> None:
+    if not path.exists():
+        return
+
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key:
+            os.environ.setdefault(key, value)
+
+
 @dataclass
 class RepoPrescan:
     repo: str
@@ -368,6 +384,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    load_dotenv()
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
         if not args.allow_no_token:

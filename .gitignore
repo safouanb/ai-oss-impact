@@ -30,3 +30,8 @@ pdf_to_md.py
 # Misc
 *.log
 *.tmp
+
+# Local secrets
+.env
+.env.*
+!.env.example

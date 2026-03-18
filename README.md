@@ -106,7 +106,7 @@ pip install -r requirements.txt
 Run the repository prescan:
 
 ```bash
-export GITHUB_TOKEN=your_token_here
+echo 'GITHUB_TOKEN=your_token_here' >> .env
 python scripts/prescan_cases.py \
   --repos docs/prescan_candidates.txt \
   --out-csv results/tables/case_prescan.csv \
