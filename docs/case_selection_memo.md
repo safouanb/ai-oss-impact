@@ -10,9 +10,15 @@
 
 ## Purpose
 
-This memo records the exploratory prescan decision context before confirmatory analysis starts.
-The prescan is limited to feasibility variables: explicit AI-signal detectability, GitHub security
-advisory traceability, maturity, and public discussion volume.
+This memo records the prescan interpretation before confirmatory analysis starts.
+The point of the prescan is simple: select cases on feasibility, not on observed results.
+
+The prescan uses only four ex-ante variables:
+
+1. Explicit AI-signal detectability.
+2. GitHub security advisory traceability.
+3. Repository maturity.
+4. Public discussion volume.
 
 ## Top-ranked candidates
 
@@ -27,39 +33,31 @@ advisory traceability, maturity, and public discussion volume.
 ## Initial interpretation
 
 1. `microsoft/vscode` is the clearest primary case.
-   - It dominates on explicit AI markers.
-   - It has strong maturity and discourse volume.
-   - It has enough published GitHub advisories to support RQ3 traceability.
+It is not just first; it is first by a lot. It leads the field on explicit AI markers (`1647`), has very high public discussion volume, and still has enough published advisories (`23`) to support RQ3 tracing.
 
-2. `vercel/next.js` is the strongest general-purpose secondary case.
-   - It has solid explicit AI signal across multiple tools.
-   - It has a stronger security advisory channel than most mature framework candidates.
-   - It gives broader ecosystem contrast than another IDE or ML framework.
+2. `vercel/next.js` is the cleanest secondary case.
+Its AI signal is lower than `pytorch/pytorch`, but still strong enough (`70`), and its security advisory channel is much richer (`36`). It also gives better ecosystem contrast against `vscode` than another IDE or ML framework would.
 
-3. `pytorch/pytorch` is a serious alternative secondary case.
-   - It has stronger AI-signal volume than `next.js`.
-   - Its weaker point is the smaller advisory count, which may constrain RQ3 depth.
+3. `pytorch/pytorch` is the strongest backup if the study prioritizes AI-signal density.
+It has a much larger explicit AI marker count than `next.js` (`144`), but only `5` GitHub advisories. That makes it somewhat weaker for a security-heavy thesis narrative.
 
-4. `n8n-io/n8n` is strong on advisories and still viable.
-   - It is a good backup if the study wants denser security material.
-   - It has lower prestige and external-validity signal than `next.js` or `pytorch`.
+4. `n8n-io/n8n` is the strongest backup if the study prioritizes security depth.
+It has a viable AI signal (`58`) and a very strong advisory channel (`42`). The tradeoff is external-validity and prestige signal; it is less established than `vscode`, `next.js`, or `pytorch`.
 
 ## Cautionary note
 
-`tensorflow/tensorflow` is eligible, but its advisory volume is unusually large (`427`) and appears
-to reflect a very broad GitHub advisory history. It is analytically viable, but it is not an ideal
-case if the goal is a clean, balanced narrative around explicit AI-signal detectability.
+`tensorflow/tensorflow` is technically eligible, but its advisory volume is unusually large (`427`) relative to its explicit AI signal (`4`). That makes it analytically usable, but not attractive as a balanced case if the goal is to study both AI detectability and security traceability in the same design.
 
-## Proposed shortlist
+## Proposed lock order
 
 1. Primary: `microsoft/vscode`
 2. Secondary: `vercel/next.js`
 3. Backup secondary: `pytorch/pytorch`
 4. Backup secondary: `n8n-io/n8n`
 
-## Decision rule for final lock
+## Decision rule
 
-Lock the final two cases after supervisor review, using the following order:
+The final two cases should be locked after supervisor review and before confirmatory modeling.
 
 1. Keep `microsoft/vscode` unless a downstream data-access problem appears.
 2. Prefer `vercel/next.js` if the goal is broader external relevance and a stronger web/security narrative.
