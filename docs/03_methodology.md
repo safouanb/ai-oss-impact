@@ -18,6 +18,18 @@ This prescan is treated as exploratory feasibility work, not as part of the conf
 
 ## Phase 1: AI contribution detection (RQ1)
 
+Phase 1 constructs the labelled contribution dataset used in the rest of the thesis. The unit of identification is the pull request, because this is the level at which AIDev records agent involvement and where review dynamics are most directly observable. Commit-level labels are then propagated only where a pull request-to-commit linkage can be established from repository history.
+
+The primary detection source is the AIDev dataset, which provides externally curated pull requests attributed to major coding agents. For selected repositories that appear in AIDev, those pull requests are treated as high-confidence AI-positive observations rather than rediscovered from scratch. This reduces dependence on brittle keyword-only detection and gives the study a stronger starting point than a purely local heuristic approach.
+
+Because AIDev does not capture all forms of AI assistance, the dataset is extended using a supplementary marker-based pass over repository metadata. This pass records explicit branch-name conventions such as `codex/`, `copilot/`, and `cursor/`; bot-authored activity where the bot identity is project-visible; and explicit co-author or commit-message signatures that directly indicate AI involvement. Marker-based rules are intentionally conservative. The study prioritizes precision over recall in the high-confidence bucket, because downstream RQ2 and RQ3 analyses are more vulnerable to false positives than to undercounting hidden AI use.
+
+The resulting labels are assigned in confidence tiers rather than as a naive binary. Contributions are classified as `high-confidence AI`, `medium-confidence AI`, or `unresolved`. High-confidence AI labels are reserved for AIDev-linked pull requests and explicit repository-visible markers. Medium-confidence AI labels are assigned when multiple weaker indicators point in the same direction but no single indicator is definitive. Unresolved cases remain unlabelled for the main confirmatory analyses and can later be used in sensitivity checks if needed.
+
+To reduce measurement error, Phase 1 includes a manual validation sample. A stratified subset of pull requests from each case repository is reviewed against raw metadata, patch context, and review history. The goal of this validation is not to perfectly detect all AI assistance, which is not possible with public metadata alone, but to estimate the precision of the high-confidence and medium-confidence tiers and to document the residual uncertainty in the label construction process.
+
+The output of Phase 1 is a repository-specific labelled dataset containing pull request identifiers, linked commits where available, detection source, confidence tier, and timestamp. This dataset serves two roles in the study. First, it answers RQ1 by describing the detectable volume and temporal evolution of AI-related contributions. Second, it provides the treatment-like grouping required for the Phase 2 comparisons of technical debt indicators, review dynamics, and security traceability.
+
 ## Phase 2: quantitative code and security analysis (RQ2, RQ3)
 
 ### Code quality and technical debt metrics

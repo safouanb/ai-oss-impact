@@ -48,16 +48,23 @@ It has a viable AI signal (`58`) and a very strong advisory channel (`42`). The 
 
 `tensorflow/tensorflow` is technically eligible, but its advisory volume is unusually large (`427`) relative to its explicit AI signal (`4`). That makes it analytically usable, but not attractive as a balanced case if the goal is to study both AI detectability and security traceability in the same design.
 
-## Proposed lock order
+## Working case lock
 
-1. Primary: `microsoft/vscode`
-2. Secondary: `vercel/next.js`
+The study proceeds with the following working lock:
+
+1. Primary case: `microsoft/vscode`
+2. Secondary case: `vercel/next.js`
 3. Backup secondary: `pytorch/pytorch`
 4. Backup secondary: `n8n-io/n8n`
 
-## Decision rule
+This lock is provisional only in the narrow sense that it can still change if either of the following happens:
 
-The final two cases should be locked after supervisor review and before confirmatory modeling.
+1. Supervisor feedback requires a different balance between AI-signal density and security depth.
+2. A downstream data-access or traceability problem makes one of the two selected cases analytically weak.
+
+Absent one of those two conditions, the thesis should proceed with `microsoft/vscode` and `vercel/next.js`.
+
+## Decision rule
 
 1. Keep `microsoft/vscode` unless a downstream data-access problem appears.
 2. Prefer `vercel/next.js` if the goal is broader external relevance and a stronger web/security narrative.
