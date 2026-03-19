@@ -1,0 +1,17 @@
+repo,stars,forks,subscribers,open_issues,age_years,default_branch,advisories_total,advisories_high_or_critical,advisories_recent,advisories_critical,pr_count,issue_count,ai_markers_total,ai_detectability_norm,security_traceability_norm,discourse_richness_norm,maturity_norm,prescan_score,eligible,exclusion_reasons,codex_branch,copilot_branch,cursor_branch,devin_bot,claude_coauthor
+microsoft/vscode,182839,38621,3407,15481,10.54,main,23,19,10,0,52516,234927,1647,1.0,0.6619,1.0,0.7577,0.8743,True,,6,1639,0,0,2
+vercel/next.js,138369,30669,1504,3504,9.45,canary,36,12,28,2,35550,24363,70,0.5316,0.7083,0.4719,0.6424,0.5838,True,,2,8,53,7,0
+pytorch/pytorch,98399,27253,1781,18040,9.6,main,5,2,4,1,119922,57379,144,0.638,0.3268,0.8373,0.5459,0.5753,True,,34,16,0,0,94
+n8n-io/n8n,180009,55968,1050,1428,6.74,master,42,26,42,15,18848,8396,58,0.5041,0.8287,0.2066,0.6389,0.5555,True,,40,10,2,0,6
+home-assistant/core,85453,37009,1330,3561,12.5,dev,13,8,2,4,96385,68653,41,0.4534,0.4456,0.8132,0.5915,0.5368,True,,9,28,2,0,2
+tensorflow/tensorflow,194231,75259,7402,3775,10.36,master,427,52,1,12,69309,41247,4,0.1365,0.7553,0.6782,0.7703,0.4939,True,,0,2,0,0,2
+rust-lang/rust,111334,14642,1474,12297,15.75,main,6,2,3,1,91435,61763,3,0.1032,0.3154,0.7881,0.7676,0.3703,True,,2,1,0,0,0
+open-webui/open-webui,127881,18071,560,318,2.45,main,9,7,9,0,6808,7944,26,0.3876,0.5144,0.0,0.4086,0.3502,True,,12,2,1,0,11
+langchain-ai/langchain,130233,21475,819,505,3.42,master,3,2,3,1,17564,9211,35,0.4305,0.2923,0.2007,0.4432,0.3444,True,,12,16,1,0,6
+python/cpython,72031,34265,1532,9327,9.1,main,0,0,0,0,69439,75628,16,0.3187,0.0,0.7697,0.4386,0.3253,False,no_github_security_advisories,1,0,0,0,15
+facebook/react,244062,50839,6670,1185,12.82,main,5,4,5,1,19159,14410,2,0.0604,0.3993,0.2769,0.9118,0.2905,True,,2,0,0,0,0
+kubernetes/kubernetes,121226,42704,3187,2609,11.78,master,0,0,0,0,88379,48737,4,0.1365,0.0,0.7507,0.6734,0.2721,False,no_github_security_advisories,1,0,0,0,3
+supabase/supabase,99261,11836,643,954,6.43,master,0,0,0,0,19585,5292,30,0.4082,0.0,0.176,0.4535,0.2438,False,no_github_security_advisories,6,14,7,3,0
+nodejs/node,116324,35107,2949,2534,11.31,main,0,0,0,0,39631,20130,2,0.0604,0.0,0.4711,0.6469,0.1831,False,no_github_security_advisories,1,1,0,0,0
+golang/go,133091,18868,3334,9877,11.58,master,0,0,0,0,4903,70640,1,0.0,0.0,0.55,0.695,0.1795,False,no_github_security_advisories,0,1,0,0,0
+apache/kafka,32169,15050,1048,313,14.59,trunk,0,0,0,0,21809,0,1,0.0,0.0,0.1316,0.365,0.0628,False,no_github_security_advisories,0,0,0,0,1

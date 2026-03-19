@@ -23,6 +23,7 @@ from typing import Any
 
 import matplotlib
 import requests
+from requests.exceptions import RequestException
 
 matplotlib.use("Agg")
 
@@ -62,6 +63,14 @@ def load_dotenv(path: Path = Path(".env")) -> None:
         value = value.strip().strip('"').strip("'")
         if key:
             os.environ.setdefault(key, value)
+
+
+TRACE = os.environ.get("PRESCAN_TRACE") == "1"
+
+
+def trace(message: str) -> None:
+    if TRACE:
+        print(f"[trace] {message}", flush=True)
 
 
 @dataclass
@@ -121,47 +130,66 @@ class RepoPrescan:
 class GitHubClient:
     def __init__(self, token: str | None, sleep_seconds: float | None = None) -> None:
         self.session = requests.Session()
-        self.session.headers.update({"Accept": "application/vnd.github+json"})
+        self.session.headers.update({"Accept": "application/vnd.github+json", "Connection": "close"})
         if token:
             self.session.headers.update({"Authorization": f"Bearer {token}"})
         self.sleep_seconds = sleep_seconds if sleep_seconds is not None else (0.25 if token else 7.0)
 
-    def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any:
-        while True:
-            response = self.session.get(url, params=params, timeout=60)
-            if response.status_code == 403 and response.headers.get("X-RateLimit-Remaining") == "0":
-                reset = int(response.headers.get("X-RateLimit-Reset", "0"))
-                wait_seconds = max(reset - int(time.time()) + 2, 2)
-                print(f"[rate-limit] waiting {wait_seconds}s for {url}")
+    def get_response(self, url: str, params: dict[str, Any] | None = None) -> requests.Response:
+        retries = 3
+        for attempt in range(1, retries + 1):
+            try:
+                response = self.session.get(url, params=params, timeout=(20, 60))
+                if response.status_code == 403 and response.headers.get("X-RateLimit-Remaining") == "0":
+                    reset = int(response.headers.get("X-RateLimit-Reset", "0"))
+                    wait_seconds = max(reset - int(time.time()) + 2, 2)
+                    print(f"[rate-limit] waiting {wait_seconds}s for {url}")
+                    time.sleep(wait_seconds)
+                    continue
+                response.raise_for_status()
+                resource = response.headers.get("X-RateLimit-Resource", "")
+                if resource == "search":
+                    time.sleep(self.sleep_seconds)
+                return response
+            except RequestException as exc:
+                if attempt == retries:
+                    raise
+                wait_seconds = attempt * 5
+                print(f"[retry {attempt}/{retries}] {url}: {exc}; waiting {wait_seconds}s")
                 time.sleep(wait_seconds)
-                continue
-            response.raise_for_status()
-            resource = response.headers.get("X-RateLimit-Resource", "")
-            if resource == "search":
-                time.sleep(self.sleep_seconds)
-            return response.json()
+
+        raise RuntimeError(f"failed to fetch {url}")
+
+    def get_json(self, url: str, params: dict[str, Any] | None = None) -> Any:
+        response = self.get_response(url, params=params)
+        return response.json()
 
     def repo_metadata(self, repo: str) -> dict[str, Any]:
+        trace(f"repo_metadata {repo}")
         return self.get_json(f"{API_ROOT}/repos/{repo}")
 
     def search_count(self, query: str) -> int:
+        trace(f"search_count {query}")
         payload = self.get_json(f"{API_ROOT}/search/issues", params={"q": query, "per_page": 1})
         return int(payload.get("total_count", 0))
 
     def security_advisories(self, repo: str) -> list[dict[str, Any]]:
+        trace(f"security_advisories {repo}")
         advisories: list[dict[str, Any]] = []
-        page = 1
+        url = f"{API_ROOT}/repos/{repo}/security-advisories"
+        params: dict[str, Any] | None = {"state": "published", "per_page": 100}
         while True:
-            payload = self.get_json(
-                f"{API_ROOT}/repos/{repo}/security-advisories",
-                params={"state": "published", "per_page": 100, "page": page},
-            )
+            trace(f"security_advisories request repo={repo} url={url}")
+            response = self.get_response(url, params=params)
+            payload = response.json()
             if not payload:
                 break
             advisories.extend(payload)
-            if len(payload) < 100:
+            next_url = response.links.get("next", {}).get("url")
+            if not next_url:
                 break
-            page += 1
+            url = next_url
+            params = None
         return advisories
 
 

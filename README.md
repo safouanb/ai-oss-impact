@@ -62,6 +62,8 @@ Full protocol: [docs/case_selection_protocol.md](./docs/case_selection_protocol.
 
 Prescan workflow: [docs/prescan_pipeline.md](./docs/prescan_pipeline.md)
 
+Selection memo: [docs/case_selection_memo.md](./docs/case_selection_memo.md)
+
 ## Project status
 
 | Workstream | Status |
