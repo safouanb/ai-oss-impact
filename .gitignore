@@ -20,6 +20,27 @@ references/
 thesis_proposal.md
 pdf_to_md.py
 
+# Thesis manuscript build outputs
+Master_Thesis_Safouan_Bolbaroud/*.aux
+Master_Thesis_Safouan_Bolbaroud/*.bbl
+Master_Thesis_Safouan_Bolbaroud/*.bcf
+Master_Thesis_Safouan_Bolbaroud/*.blg
+Master_Thesis_Safouan_Bolbaroud/*.fdb_latexmk
+Master_Thesis_Safouan_Bolbaroud/*.fls
+Master_Thesis_Safouan_Bolbaroud/*.lof
+Master_Thesis_Safouan_Bolbaroud/*.log
+Master_Thesis_Safouan_Bolbaroud/*.lot
+Master_Thesis_Safouan_Bolbaroud/*.nav
+Master_Thesis_Safouan_Bolbaroud/*.out
+Master_Thesis_Safouan_Bolbaroud/*.pdf
+Master_Thesis_Safouan_Bolbaroud/*.run.xml
+Master_Thesis_Safouan_Bolbaroud/*.snm
+Master_Thesis_Safouan_Bolbaroud/*.synctex.gz
+Master_Thesis_Safouan_Bolbaroud/*.toc
+
+# Legacy local leftovers
+Master_Thesis_Safouan_Bolbaroud/appendix/Data/
+
 # macOS
 .DS_Store
 

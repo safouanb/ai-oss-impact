@@ -1,0 +1,48 @@
+\documentclass[a4paper,12pt,openany]{report}
+\input{setup}
+
+\newcommand{\thesistitle}{When Code Becomes Cheap: Is AI Disrupting Open Source?}
+\newcommand{\thesissubtitle}{A mixed-methods study of AI contributions, technical debt, and security in open-source software}
+\newcommand{\thesisauthor}{Safouan Bolbaroud}
+\newcommand{\thesisprogram}{MSc Business Information Technology Management}
+\newcommand{\thesisinstitution}{University of Amsterdam}
+\newcommand{\thesissupervisor}{Chintan Amrit}
+\newcommand{\thesisdate}{April 2026}
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\input{title}
+\clearpage
+\hypersetup{pageanchor=true}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\textit{Write a concise abstract here. A good target is 150--250 words covering the research problem, design, data, main findings, and contribution.}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{sections/01_introduction}
+\input{sections/02_literature_review}
+\input{sections/03_research_questions}
+\input{sections/04_methodology}
+\input{sections/05_findings}
+\input{sections/06_discussion}
+\input{sections/07_conclusion}
+
+\clearpage
+\bibliography{references}
+
+\appendix
+\input{appendix/appendix_a_data}
+\input{appendix/appendix_b_figures}
+\input{appendix/appendix_c_tables}
+
+\end{document}

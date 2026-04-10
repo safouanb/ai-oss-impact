@@ -79,6 +79,11 @@ Selection memo: [docs/case_selection_memo.md](./docs/case_selection_memo.md)
 
 ```text
 .
+├── Master_Thesis_Safouan_Bolbaroud/
+│   ├── sections/             # LaTeX manuscript chapters
+│   ├── appendix/             # LaTeX appendices
+│   ├── figures/              # Thesis figures
+│   └── tables/               # Thesis tables
 ├── data/
 │   ├── raw/                 # Source data pulls
 │   └── processed/           # Cleaned and labeled outputs
@@ -96,6 +101,21 @@ Selection memo: [docs/case_selection_memo.md](./docs/case_selection_memo.md)
 │   └── tables/
 └── scripts/
 ```
+
+## Versioning policy
+
+This repository tracks:
+
+1. Thesis source files (`docs/`, `scripts/`, `results/` summaries, and `Master_Thesis_Safouan_Bolbaroud/`)
+2. Small thesis-facing tables and figures used as part of the research audit trail
+3. Protocol and methodological documentation
+
+This repository does **not** track:
+
+1. Raw GitHub pulls in `data/raw/`
+2. Processed local datasets in `data/processed/`
+3. Local paper extracts in `references/`
+4. LaTeX build artifacts and unrelated appendix leftovers
 
 ## Quick start
 
