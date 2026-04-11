@@ -73,6 +73,8 @@ The next SLR step is not collecting many more papers. It is synthesis.
 
 A working extraction sheet now exists at `docs/slr_literature_matrix.csv` so the review can move from isolated paper notes to a comparable evidence matrix.
 
+The highest-priority missing additions are tracked explicitly in `docs/slr_priority_sources.md` and have been appended to the matrix with `must_add` / `nice_to_add` notes.
+
 Specifically:
 
 1. Build a literature matrix with columns for `claim`, `method`, `unit of analysis`, `main finding`, `relevance to RQ1-RQ4`, and `limitations`.
