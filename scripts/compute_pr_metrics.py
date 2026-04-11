@@ -51,6 +51,35 @@ SECURITY_PATTERN = re.compile(
     re.I,
 )
 
+NON_ANALYZABLE_PATH_SEGMENTS = (
+    "/compiled/",
+    "/dist/",
+    "/vendor/",
+    "/vendors/",
+    "/generated/",
+    "/__generated__/",
+)
+
+NON_ANALYZABLE_FILE_NAMES = {
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "bun.lockb",
+    "cargo.lock",
+    "composer.lock",
+    "gemfile.lock",
+    "poetry.lock",
+    "uv.lock",
+}
+
+NON_ANALYZABLE_SUFFIXES = (
+    ".min.js",
+    ".min.css",
+)
+
+# Extremely long single-line additions usually indicate minified or bundled code.
+MAX_ANALYZABLE_LINE_LENGTH = 500
+
 
 def repo_slug(repo: str) -> str:
     return repo.replace("/", "_")
@@ -80,6 +109,18 @@ def parse_dt(s: str | None) -> datetime | None:
     return datetime.fromisoformat(s.replace("Z", "+00:00"))
 
 
+def is_analyzable_patch_file(filename: str) -> bool:
+    normalized = filename.lower()
+    basename = Path(normalized).name
+    if basename in NON_ANALYZABLE_FILE_NAMES:
+        return False
+    if normalized.endswith(NON_ANALYZABLE_SUFFIXES):
+        return False
+    if any(segment in normalized for segment in NON_ANALYZABLE_PATH_SEGMENTS):
+        return False
+    return True
+
+
 def metrics_from_bundle(bundle: dict, label_row: dict | None) -> dict:
     detail = bundle.get("detail", {})
     files = bundle.get("files", [])
@@ -102,19 +143,32 @@ def metrics_from_bundle(bundle: dict, label_row: dict | None) -> dict:
     # TODO/FIXME in patch additions only (lines starting with +)
     todo_count = 0
     decision_count = 0
+    analyzable_added_lines = 0
     for f in files:
+        filename = f.get("filename", "")
+        if not is_analyzable_patch_file(filename):
+            continue
         patch = f.get("patch") or ""
         for line in patch.splitlines():
             if line.startswith("+") and not line.startswith("+++"):
-                todo_count += len(TODO_PATTERN.findall(line))
-                decision_count += len(DECISION_PATTERN.findall(line))
+                analyzed_line = line[1:]
+                if len(analyzed_line) > MAX_ANALYZABLE_LINE_LENGTH:
+                    continue
+                analyzable_added_lines += 1
+                todo_count += len(TODO_PATTERN.findall(analyzed_line))
+                decision_count += len(DECISION_PATTERN.findall(analyzed_line))
 
     # Cyclomatic complexity proxy: decisions per 100 added lines.
-    # Set to None for very small PRs (<10 added lines) to avoid denominator
-    # instability (a single keyword in 1-2 lines produces extreme outliers).
+    # Use only analyzable patch additions (exclude generated/compiled artifacts,
+    # lockfiles, and very long minified lines) to avoid inflated values that do
+    # not reflect authored source complexity.
+    # Set to None for very small PRs (<10 analyzable added lines) to avoid
+    # denominator instability.
     # Use median (not mean) in downstream analysis.
-    if added >= 10:
-        complexity_proxy = round((decision_count / added) * 100, 2)
+    if analyzable_added_lines >= 10:
+        complexity_proxy = round(
+            (decision_count / analyzable_added_lines) * 100, 2
+        )
     else:
         complexity_proxy = None
 
@@ -168,6 +222,7 @@ def metrics_from_bundle(bundle: dict, label_row: dict | None) -> dict:
         "deleted_lines": deleted,
         "changed_files": len(files),
         "commit_count": len(commits),
+        "analyzable_added_lines": analyzable_added_lines,
         "todo_fixme_count": todo_count,
         "complexity_proxy": complexity_proxy,
         "security_kw_in_review": security_kw_count,

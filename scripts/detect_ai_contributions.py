@@ -23,6 +23,7 @@ from typing import Any
 RAW_ROOT = Path("data/raw")
 PROCESSED_ROOT = Path("data/processed")
 LOCKED_REPOS = ("microsoft/vscode", "vercel/next.js")
+AIDEV_INDEX_PATH = PROCESSED_ROOT / "aidev_pr_index.json"
 
 HIGH_BRANCH_PREFIXES = (
     ("codex_branch", "codex/"),
@@ -72,6 +73,16 @@ def load_jsonl(path: Path) -> list[dict[str, Any]]:
             if line:
                 rows.append(json.loads(line))
     return rows
+
+
+def load_aidev_index() -> dict[str, set[int]]:
+    if not AIDEV_INDEX_PATH.exists():
+        return {}
+    payload = json.loads(AIDEV_INDEX_PATH.read_text())
+    return {
+        repo: {int(pr_number) for pr_number in pr_numbers}
+        for repo, pr_numbers in payload.items()
+    }
 
 
 def add_signal(signals: list[dict[str, str]], level: str, source: str, evidence: str) -> None:
@@ -126,7 +137,11 @@ def score_signals(signals: list[dict[str, str]]) -> tuple[str, str, float]:
     return "unresolved", "none", 0.0
 
 
-def pr_record(repo: str, bundle: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def pr_record(
+    repo: str,
+    bundle: dict[str, Any],
+    aidev_pr_numbers: set[int],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     detail = bundle["detail"]
     summary = bundle["summary"]
     reviews = bundle["reviews"]
@@ -139,6 +154,15 @@ def pr_record(repo: str, bundle: dict[str, Any]) -> tuple[dict[str, Any], list[d
 
     head_ref = ((detail.get("head") or {}).get("ref")) or ""
     author_login = ((detail.get("user") or {}).get("login")) or ""
+    pr_number = int(detail["number"])
+
+    if pr_number in aidev_pr_numbers:
+        add_signal(
+            signals,
+            "high",
+            "aidev_dataset",
+            "PR appears in Li et al. (2025) AIDev dataset",
+        )
 
     scan_branch(signals, head_ref)
     scan_login(signals, author_login, "pr_author")
@@ -157,7 +181,7 @@ def pr_record(repo: str, bundle: dict[str, Any]) -> tuple[dict[str, Any], list[d
         label, confidence_tier, confidence_score = score_signals(commit_signals)
         commit_record = {
             "repo": repo,
-            "pr_number": detail["number"],
+            "pr_number": pr_number,
             "commit_sha": commit["sha"],
             "commit_author_login": ((commit.get("author") or {}).get("login")) or "",
             "commit_author_name": (((commit.get("commit") or {}).get("author")) or {}).get("name", ""),
@@ -186,7 +210,7 @@ def pr_record(repo: str, bundle: dict[str, Any]) -> tuple[dict[str, Any], list[d
 
     pr_row = {
         "repo": repo,
-        "pr_number": detail["number"],
+        "pr_number": pr_number,
         "state": detail.get("state", summary.get("state", "")),
         "draft": bool(detail.get("draft", False)),
         "title": detail.get("title", ""),
@@ -235,16 +259,23 @@ def label_repo(repo: str) -> dict[str, Any]:
         raise SystemExit(f"missing raw PR bundle file: {source}")
 
     bundles = load_jsonl(source)
+    aidev_index = load_aidev_index()
+    aidev_pr_numbers = aidev_index.get(repo, set())
     pr_rows: list[dict[str, Any]] = []
     commit_rows: list[dict[str, Any]] = []
 
     for bundle in bundles:
-        pr_row, commit_records = pr_record(repo, bundle)
+        pr_row, commit_records = pr_record(repo, bundle, aidev_pr_numbers)
         pr_rows.append(pr_row)
         commit_rows.extend(commit_records)
 
     write_csv(processed_dir / "pr_labels.csv", pr_rows)
     write_csv(processed_dir / "commit_labels.csv", commit_rows)
+
+    aidev_overlap_pr_count = sum(
+        1 for row in pr_rows if "aidev_dataset" in row["evidence_json"]
+    )
+    pr_numbers = [int(row["pr_number"]) for row in pr_rows]
 
     summary = {
         "repo": repo,
@@ -264,6 +295,10 @@ def label_repo(repo: str) -> dict[str, Any]:
             "pr_labels": str(processed_dir / "pr_labels.csv"),
             "commit_labels": str(processed_dir / "commit_labels.csv"),
         },
+        "aidev_index_pr_count": len(aidev_pr_numbers),
+        "aidev_overlap_pr_count": aidev_overlap_pr_count,
+        "sample_pr_number_min": min(pr_numbers) if pr_numbers else None,
+        "sample_pr_number_max": max(pr_numbers) if pr_numbers else None,
     }
     write_json(processed_dir / "summary.json", summary)
     return summary

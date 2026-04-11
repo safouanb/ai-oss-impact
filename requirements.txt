@@ -2,6 +2,8 @@ pymupdf
 requests
 pandas
 numpy
+datasets
+pyarrow
 radon
 gitpython
 PyGithub
