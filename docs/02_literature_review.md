@@ -75,6 +75,8 @@ A working extraction sheet now exists at `docs/slr_literature_matrix.csv` so the
 
 The highest-priority missing additions are tracked explicitly in `docs/slr_priority_sources.md` and have been appended to the matrix with `must_add` / `nice_to_add` notes.
 
+The SLR workflow itself is now documented in `docs/slr_protocol.md`, with execution logs seeded in `docs/slr_search_log.csv` and `docs/slr_screening_decisions.csv`.
+
 Specifically:
 
 1. Build a literature matrix with columns for `claim`, `method`, `unit of analysis`, `main finding`, `relevance to RQ1-RQ4`, and `limitations`.

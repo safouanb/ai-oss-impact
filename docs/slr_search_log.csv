@@ -1,0 +1,9 @@
+date,database,query_string,filters,results_screened,results_kept,status,notes
+2026-04-15,Google Scholar,"""AI-assisted"" OR ""AI-generated"" OR ""coding agent"" OR agentic AND ""pull request"" AND GitHub","2021-2026; software engineering",0,0,planned,core AI contribution strand
+2026-04-15,Google Scholar,"""ChatGPT"" AND GitHub AND (""pull request"" OR issue) AND developer","2023-2026",0,0,planned,observability/discourse strand
+2026-04-15,ACM Digital Library,"""agentic"" AND ""pull request"" AND GitHub","2024-2026",0,0,planned,agentic PR strand
+2026-04-15,IEEE Xplore,"""AI-generated pull request"" OR ""review effort""","2024-2026",0,0,planned,review burden strand
+2026-04-15,SpringerLink,"""technical debt"" AND ""generative AI"" AND software","2023-2026",0,0,planned,technical debt strand
+2026-04-15,ScienceDirect,"""AI-generated code"" AND security AND software","2021-2026",0,0,planned,security strand
+2026-04-15,arXiv,"""coding agent"" AND GitHub AND ""pull request""","2024-2026",0,0,planned,preprint sweep for fast-moving agentic literature
+2026-04-15,Snowballing,"seed papers from li2025 hao2024 watanabe2025 pearce2021",backward+forward snowballing,0,0,planned,method-guided expansion
