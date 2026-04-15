@@ -1,9 +1,8 @@
 date,database,query_string,filters,results_screened,results_kept,status,notes
-2026-04-15,Google Scholar,"""AI-assisted"" OR ""AI-generated"" OR ""coding agent"" OR agentic AND ""pull request"" AND GitHub","2021-2026; software engineering",0,0,planned,core AI contribution strand
-2026-04-15,Google Scholar,"""ChatGPT"" AND GitHub AND (""pull request"" OR issue) AND developer","2023-2026",0,0,planned,observability/discourse strand
-2026-04-15,ACM Digital Library,"""agentic"" AND ""pull request"" AND GitHub","2024-2026",0,0,planned,agentic PR strand
-2026-04-15,IEEE Xplore,"""AI-generated pull request"" OR ""review effort""","2024-2026",0,0,planned,review burden strand
-2026-04-15,SpringerLink,"""technical debt"" AND ""generative AI"" AND software","2023-2026",0,0,planned,technical debt strand
-2026-04-15,ScienceDirect,"""AI-generated code"" AND security AND software","2021-2026",0,0,planned,security strand
-2026-04-15,arXiv,"""coding agent"" AND GitHub AND ""pull request""","2024-2026",0,0,planned,preprint sweep for fast-moving agentic literature
-2026-04-15,Snowballing,"seed papers from li2025 hao2024 watanabe2025 pearce2021",backward+forward snowballing,0,0,planned,method-guided expansion
+2026-04-15,Existing reference bank audit,"current references/*.md corpus","all existing local notes",15,12,completed,"kept core academic/context sources; excluded weak non-primary items from the SLR core"
+2026-04-15,Web search + official source pages,"""AI-assisted"" OR ""AI-generated"" OR ""coding agent"" OR agentic AND ""pull request"" AND GitHub","2021-2026; software engineering",10,6,completed,"kept li2025, watanabe2025, minh2026, ogenrwot2026, becker2025, zeng2025"
+2026-04-15,Web search + official source pages,"""ChatGPT"" AND GitHub AND (""pull request"" OR issue) AND developer","2023-2026",4,2,completed,"kept xiao2024 and hao2024 for observability/discourse evidence"
+2026-04-15,Web search + official source pages,"""technical debt"" AND ""generative AI"" AND software","2023-2026",4,2,completed,"kept moreschini2026 and retained agarwal2026 as the strongest AI/TD empirical comparator"
+2026-04-15,Web search + official source pages,"""AI-generated code"" AND security AND software","2021-2026",6,2,completed,"kept pearce2021 and pearce2023 as core empirical security sources"
+2026-04-15,Web search + official source pages,"""systematic literature review"" AND ""software engineering"" AND guidelines","software engineering methods",5,4,completed,"kept kitchenham2007, wohlin2014, runeson2009, creswell2017"
+2026-04-15,Snowballing,"seed papers li2025; he2025; hao2024; pearce2021","backward and forward chaining from seed set",6,3,completed,"confirmed relevance of becker2025, watanabe2025, and zeng2025 as follow-on contextual papers"

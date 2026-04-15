@@ -1,0 +1,15 @@
+citation_key,source_url,download_or_access_url,local_artifact,status,notes
+xiao2024,https://arxiv.org/abs/2309.03914,https://arxiv.org/pdf/2309.03914.pdf,references/pdfs/xiao2024.pdf,downloaded_local,Open-access arXiv PDF downloaded.
+hao2024,https://link.springer.com/article/10.1007/s10664-024-10540-x,https://arxiv.org/pdf/2403.10468.pdf,references/pdfs/hao2024_preprint.pdf,downloaded_local,Local file is the arXiv preprint; published source is Springer.
+watanabe2025,https://arxiv.org/abs/2509.14745,https://arxiv.org/pdf/2509.14745.pdf,references/pdfs/watanabe2025.pdf,downloaded_local,Final TOSEM version also exists; local file is the arXiv preprint.
+minh2026,https://arxiv.org/abs/2601.00753,https://arxiv.org/pdf/2601.00753.pdf,references/pdfs/minh2026.pdf,downloaded_local,Open-access arXiv PDF downloaded.
+ogenrwot2026,https://arxiv.org/abs/2601.17581,https://arxiv.org/pdf/2601.17581.pdf,references/pdfs/ogenrwot2026.pdf,downloaded_local,Open-access arXiv PDF downloaded.
+pearce2021,https://arxiv.org/abs/2108.09293,https://arxiv.org/pdf/2108.09293.pdf,references/pdfs/pearce2021.pdf,downloaded_local,Open-access arXiv PDF downloaded.
+pearce2023,https://ieeexplore.ieee.org/abstract/document/10179324,https://arxiv.org/pdf/2112.02125.pdf,references/pdfs/pearce2023_preprint.pdf,downloaded_local,Local file is the arXiv/preprint version; published source is IEEE S&P 2023.
+moreschini2026,https://researchportal.tuni.fi/en/publications/the-evolution-of-technical-debt-from-devops-to-generative-ai-a-mu/,https://oulurepo.oulu.fi/bitstream/handle/10024/58341/nbnfioulu-202509155859.pdf?sequence=1&isAllowed=y,references/pdfs/moreschini2026.pdf,downloaded_local,Open-access repository PDF downloaded.
+kitchenham2007,https://www.researchgate.net/publication/302924724_Guidelines_for_performing_Systematic_Literature_Reviews_in_Software_Engineering,, ,source_page_only,ResearchGate page located; manual download may require browser/session.
+wohlin2014,https://www.wohlin.eu/ease14.pdf,https://www.wohlin.eu/ease14.pdf,references/pdfs/wohlin2014.pdf,downloaded_local,Open PDF downloaded.
+runeson2009,https://link.springer.com/article/10.1007/s10664-008-9102-8,https://link.springer.com/content/pdf/10.1007/s10664-008-9102-8.pdf,references/pdfs/runeson2009.pdf,downloaded_local,Open-access PDF downloaded.
+creswell2017,https://collegepublishing.sagepub.com/products/designing-and-conducting-mixed-methods-research-3-241842,, ,manual_access_needed,Book metadata recorded; full text requires library or purchase access.
+becker2025,https://arxiv.org/abs/2507.09089,https://arxiv.org/pdf/2507.09089.pdf,references/pdfs/becker2025.pdf,downloaded_local,Open-access arXiv PDF downloaded.
+zeng2025,https://arxiv.org/abs/2509.01494,https://arxiv.org/pdf/2509.01494.pdf,references/pdfs/zeng2025.pdf,downloaded_local,Open-access arXiv PDF downloaded.

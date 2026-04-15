@@ -1,8 +1,8 @@
 # Literature review
 
-This chapter is not yet written as thesis prose, but the source base is already strong enough to structure the review. The current SLR state is therefore best described as **source extraction complete enough to synthesize, but synthesis not yet drafted**.
+This chapter is not yet written as thesis prose, but the literature base is now substantially more formalized than before. The current SLR state is best described as **screened and scoped, with matrix extraction complete for the included core corpus, but narrative synthesis still not drafted**.
 
-The existing literature bank in `references/` already supports six review strands.
+The existing literature bank in `references/` together with the audit-trail files in `docs/slr_*.csv` supports six review strands.
 
 ## The velocity–quality trade-off
 
@@ -71,17 +71,15 @@ The thesis gap is therefore not “AI code might be risky.” That claim is too 
 
 The next SLR step is not collecting many more papers. It is synthesis.
 
-A working extraction sheet now exists at `docs/slr_literature_matrix.csv` so the review can move from isolated paper notes to a comparable evidence matrix.
+A working extraction sheet now exists at `docs/slr_literature_matrix.csv`, and the current included corpus has been screened into a core set plus contextual grey-literature anchors.
 
-The highest-priority missing additions are tracked explicitly in `docs/slr_priority_sources.md` and have been appended to the matrix with `must_add` / `nice_to_add` notes.
+The highest-priority additions are tracked explicitly in `docs/slr_priority_sources.md`, and the included or excluded status of candidate papers is now recorded in `docs/slr_screening_decisions.csv`.
 
-The SLR workflow itself is now documented in `docs/slr_protocol.md`, with execution logs seeded in `docs/slr_search_log.csv` and `docs/slr_screening_decisions.csv`.
+The SLR workflow itself is now documented in `docs/slr_protocol.md`, with executed search passes logged in `docs/slr_search_log.csv`, screening outcomes in `docs/slr_screening_decisions.csv`, and source-file availability in `docs/slr_source_inventory.csv`.
 
-Specifically:
+What remains is:
 
-1. Build a literature matrix with columns for `claim`, `method`, `unit of analysis`, `main finding`, `relevance to RQ1-RQ4`, and `limitations`.
-2. Use that matrix to draft this chapter in narrative form rather than as paper-by-paper summaries.
-3. Separate background literature from argument-serving literature:
-   - background: code review, OSS governance, technical debt
-   - argument-serving: AI contribution detection, AI quality/security evidence
-4. End the chapter with the exact gap statement that justifies your two-case mixed-methods design.
+1. convert the extracted matrix into narrative prose rather than paper-by-paper summaries,
+2. keep background literature clearly separate from argument-serving literature,
+3. decide whether any final post-April-2026 follow-up paper materially changes the corpus,
+4. end the chapter with the exact gap statement that justifies the two-case mixed-methods design.
