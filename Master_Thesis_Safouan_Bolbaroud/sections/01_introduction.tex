@@ -2,13 +2,21 @@
 \label{ch:introduction}
 
 \section{Research problem}
-\textit{Introduce the shift in open-source development after the widespread adoption of AI coding tools. Frame the problem around development speed, review burden, technical debt, and security risk.}
+AI tools have changed how code is produced in open-source software. Since late 2022, tools such as ChatGPT, Copilot, Cursor, Codex, and related coding agents have made it possible to write and submit code faster, in larger volume, and with less effort than before. This has turned AI-assisted development into an observable part of repository activity rather than only a speculative or laboratory topic.
+
+However, open-source projects do not only need code to be written. They also need that code to be reviewed, maintained, and kept secure over time. In mature repositories, these tasks already operate under limited maintainer time and attention. If AI tools make it easier to submit more code, an important question follows: do observable indicators of maintainability, review activity, and security traceability also change?
+
+Current research offers only partial answers. Some studies show that AI tools can increase development speed, while other work shows that AI-generated code can contain quality or security weaknesses. Separate lines of research explain why technical debt and code review quality matter, but these topics are usually studied separately. There is still limited empirical evidence on whether detectable AI-assisted contributions in real open-source repositories are associated with different patterns in technical debt proxies, review indicators, and security-traceability outcomes than non-AI-signaled contributions.
 
 \section{Why this matters}
-\textit{Explain why this matters academically and practically. Connect the topic to open-source software as infrastructure and to the broader dependence of firms on OSS components.}
+This matters because open-source software is infrastructure. Many firms and digital services depend on mature open-source components, so any shift in how code enters these projects can have effects beyond the repositories themselves. If AI tools make contribution faster but also alter maintainability, review burden, or security-relevant traceability, that change matters both to researchers and to practitioners responsible for governing open-source projects.
+
+The topic also matters academically because the current debate is still fragmented. Research on AI-assisted software development often focuses on productivity, benchmark performance, or code quality in isolation. This thesis instead studies whether these issues connect in practice by examining maintainability, review, and security together in real repository settings.
 
 \section{Research objective}
-\textit{State the central objective of the thesis and clarify the mixed-methods contribution.}
+The objective of this thesis is to examine whether detectable AI-assisted contributions in \texttt{microsoft/vscode} and \texttt{vercel/next.js} are associated with different technical debt proxies, review indicators, and security-traceability patterns than other pull requests. To do so, the study combines pull-request-level AI-signal detection, quantitative comparison of maintainability and review metrics, CVE-linked traceability analysis, and qualitative analysis of public repository discourse.
+
+The contribution of the thesis is to bring together four strands that are often studied separately: AI-contribution detection, maintainability and technical debt, code review dynamics, and security traceability. The thesis does not attempt to prove that AI causes poor outcomes. Instead, it asks a more defensible question: whether observable AI-related contributions are linked to different patterns in real projects, and how those patterns are described and interpreted in public project discourse.
 
 \section{Thesis structure}
-\textit{Briefly guide the reader through Chapters 2--7.}
+Chapter 2 reviews the literature on AI-assisted software development, technical debt, code review, security, and the methodological foundations of the study. Chapter 3 presents the research questions in their final form. Chapter 4 explains the mixed-methods design, case selection process, AI-detection approach, quantitative metrics, CVE tracing, and qualitative discourse analysis. Chapter 5 presents the findings from the quantitative and qualitative analyses. Chapter 6 discusses what those findings mean, their limitations, and the broader implications for open-source governance. Chapter 7 concludes the thesis and outlines directions for future work.

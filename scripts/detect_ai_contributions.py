@@ -79,10 +79,17 @@ def load_aidev_index() -> dict[str, set[int]]:
     if not AIDEV_INDEX_PATH.exists():
         return {}
     payload = json.loads(AIDEV_INDEX_PATH.read_text())
-    return {
-        repo: {int(pr_number) for pr_number in pr_numbers}
-        for repo, pr_numbers in payload.items()
-    }
+    result = {}
+    for repo, value in payload.items():
+        # Support both old format (list of PR numbers) and new format (dict with pr_numbers key)
+        if isinstance(value, list):
+            pr_numbers = value
+        elif isinstance(value, dict):
+            pr_numbers = value.get("pr_numbers", [])
+        else:
+            pr_numbers = []
+        result[repo] = {int(n) for n in pr_numbers}
+    return result
 
 
 def add_signal(signals: list[dict[str, str]], level: str, source: str, evidence: str) -> None:

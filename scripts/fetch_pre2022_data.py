@@ -6,13 +6,18 @@ The proposal (§4.4) requires tracking metrics across:
   - pre-AI period:  2018-01-01 to 2022-12-31
   - post-AI period: 2023-01-01 to present  (already collected)
 
+Sampling strategy: yearly stratified — ~PRS_PER_YEAR PRs per calendar year
+(default 100), sampled from the middle of each year to avoid edge effects.
+This prevents the asc-ordering problem where a flat query returns only the
+earliest months of 2018.
+
 Output:
   data/raw/<slug>/pull_requests_pre2022.jsonl
   data/raw/<slug>/manifest_pre2022.json
 
 Usage:
     python scripts/fetch_pre2022_data.py --repo-set locked
-    python scripts/fetch_pre2022_data.py --repo microsoft/vscode --max-prs 500
+    python scripts/fetch_pre2022_data.py --repo microsoft/vscode --prs-per-year 100
 """
 
 from __future__ import annotations
@@ -28,9 +33,8 @@ import requests
 RAW_ROOT = Path("data/raw")
 LOCKED_REPOS = ("microsoft/vscode", "vercel/next.js")
 
-PRE_AI_SINCE = "2018-01-01T00:00:00Z"
-PRE_AI_UNTIL = "2022-12-31T23:59:59Z"
-DEFAULT_MAX_PRS = 500
+PRE_AI_YEARS = list(range(2018, 2023))   # 2018, 2019, 2020, 2021, 2022
+DEFAULT_PRS_PER_YEAR = 100               # 100 × 5 years = 500 total per repo
 
 
 def repo_slug(repo: str) -> str:
@@ -112,7 +116,42 @@ def fetch_pr_bundle(pr: dict, repo: str, token: str | None) -> dict:
     }
 
 
-def fetch_pre2022_prs(repo: str, token: str | None, max_prs: int) -> None:
+def fetch_year_prs(repo: str, year: int, token: str | None, target: int) -> list[dict]:
+    """
+    Fetch up to `target` PRs from the middle of `year` using the Search API.
+    Queries Jul 1 → Dec 31 first (second half), then Jan 1 → Jun 30 (first half)
+    so the sample is spread across the year rather than front-loaded.
+    """
+    windows = [
+        (f"{year}-07-01", f"{year}-12-31"),
+        (f"{year}-01-01", f"{year}-06-30"),
+    ]
+    collected: list[dict] = []
+    for since_date, until_date in windows:
+        if len(collected) >= target:
+            break
+        remaining = target - len(collected)
+        query = f"repo:{repo} is:pr created:{since_date}..{until_date}"
+        page = 1
+        while len(collected) < target:
+            data = github_get(
+                "https://api.github.com/search/issues",
+                token,
+                {"q": query, "sort": "created", "order": "desc",
+                 "per_page": min(100, remaining), "page": page},
+            )
+            items = data.get("items", []) if isinstance(data, dict) else []
+            if not items:
+                break
+            collected.extend(items)
+            if len(items) < 100:
+                break
+            page += 1
+            time.sleep(0.5)   # Search API secondary rate limit
+    return collected[:target]
+
+
+def fetch_pre2022_prs(repo: str, token: str | None, prs_per_year: int) -> None:
     slug = repo_slug(repo)
     raw_dir = RAW_ROOT / slug
     out_path = raw_dir / "pull_requests_pre2022.jsonl"
@@ -123,42 +162,30 @@ def fetch_pre2022_prs(repo: str, token: str | None, max_prs: int) -> None:
         print(f"  Delete {out_path} to re-collect.")
         return
 
-    print(f"  Fetching pre-2022 PRs for {repo} (since={PRE_AI_SINCE}, until={PRE_AI_UNTIL}) ...", flush=True)
+    print(
+        f"  Fetching pre-AI PRs for {repo} "
+        f"(years={PRE_AI_YEARS[0]}-{PRE_AI_YEARS[-1]}, {prs_per_year}/year) ...",
+        flush=True,
+    )
 
-    # Use Search API with date range — avoids paginating hundreds of thousands
-    # of PRs on large repos (the /pulls endpoint with 'since' does not filter
-    # by created date and causes 504s on large repos).
-    since_date = PRE_AI_SINCE[:10]   # 2018-01-01
-    until_date = PRE_AI_UNTIL[:10]   # 2022-12-31
-    query = f"repo:{repo} is:pr created:{since_date}..{until_date}"
+    all_prs: list[dict] = []
+    year_counts: dict[int, int] = {}
 
-    filtered = []
-    page = 1
-    while len(filtered) < max_prs:
-        data = github_get(
-            "https://api.github.com/search/issues",
-            token,
-            {"q": query, "sort": "created", "order": "asc",
-             "per_page": 100, "page": page},
-        )
-        items = data.get("items", []) if isinstance(data, dict) else []
-        if not items:
-            break
-        filtered.extend(items)
-        if len(items) < 100:
-            break
-        page += 1
-        time.sleep(0.5)   # Search API secondary rate limit
+    for year in PRE_AI_YEARS:
+        year_prs = fetch_year_prs(repo, year, token, prs_per_year)
+        year_counts[year] = len(year_prs)
+        all_prs.extend(year_prs)
+        print(f"    {year}: {len(year_prs)} PRs collected", flush=True)
 
-    filtered = filtered[:max_prs]
-    print(f"  Found {len(filtered)} PRs in pre-2022 window (capped at {max_prs})", flush=True)
+    total = len(all_prs)
+    print(f"  Total: {total} PRs across {len(PRE_AI_YEARS)} years", flush=True)
 
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     with out_path.open("w") as f:
-        for i, pr in enumerate(filtered):
+        for i, pr in enumerate(all_prs):
             if i % 50 == 0:
-                print(f"    Fetching bundle {i+1}/{len(filtered)} ...", flush=True)
+                print(f"    Fetching bundle {i+1}/{total} ...", flush=True)
             try:
                 bundle = fetch_pr_bundle(pr, repo, token)
                 f.write(json.dumps(bundle) + "\n")
@@ -170,26 +197,33 @@ def fetch_pre2022_prs(repo: str, token: str | None, max_prs: int) -> None:
         "repo": repo,
         "slug": slug,
         "collected_at": datetime.now(timezone.utc).isoformat(),
-        "since": PRE_AI_SINCE,
-        "until": PRE_AI_UNTIL,
+        "since": f"{PRE_AI_YEARS[0]}-01-01T00:00:00Z",
+        "until": f"{PRE_AI_YEARS[-1]}-12-31T23:59:59Z",
         "period": "pre_ai",
-        "state": "all",
-        "max_prs": max_prs,
-        "pull_request_count": len(filtered),
+        "sampling": "yearly_stratified",
+        "prs_per_year": prs_per_year,
+        "year_counts": year_counts,
+        "pull_request_count": total,
         "paths": {
             "pull_requests": str(out_path),
         },
     }
     manifest_path.write_text(json.dumps(manifest, indent=2))
 
-    print(f"  Done: {len(filtered)} pre-2022 PR bundles -> {out_path}", flush=True)
+    print(f"  Done: {total} pre-2022 PR bundles -> {out_path}", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", action="append", default=[])
     parser.add_argument("--repo-set", choices=("locked",), default=None)
-    parser.add_argument("--max-prs", type=int, default=DEFAULT_MAX_PRS)
+    parser.add_argument(
+        "--prs-per-year",
+        type=int,
+        default=DEFAULT_PRS_PER_YEAR,
+        help=f"PRs to collect per calendar year (default {DEFAULT_PRS_PER_YEAR}). "
+             f"Total per repo = prs-per-year × {len(PRE_AI_YEARS)} years.",
+    )
     return parser.parse_args()
 
 
@@ -206,12 +240,13 @@ def main() -> None:
     if not token:
         print("Warning: no GITHUB_TOKEN found — API rate limits will be severe.")
 
+    total_target = args.prs_per_year * len(PRE_AI_YEARS)
     print(f"Collecting pre-AI-era data (2018–2022) for: {repos}")
-    print(f"Max PRs per repo: {args.max_prs}\n")
+    print(f"Sampling: {args.prs_per_year} PRs/year × {len(PRE_AI_YEARS)} years = {total_target} per repo\n")
 
     for repo in repos:
         print(f"\n[{repo}]")
-        fetch_pre2022_prs(repo, token, args.max_prs)
+        fetch_pre2022_prs(repo, token, args.prs_per_year)
 
     print("\nPre-2022 data collection complete.")
     print("Next: run compute_pr_metrics.py with --period both to compare pre/post-AI metrics.")

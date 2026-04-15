@@ -41,8 +41,13 @@ def load_rows(path: Path) -> list[dict[str, str]]:
 
 def shorten_evidence(evidence_json: str, limit: int = 3) -> str:
     evidence = json.loads(evidence_json or "[]")
-    compact = [f"{item['level']}:{item['source']}={item['evidence']}" for item in evidence[:limit]]
-    return " | ".join(compact)
+    parts: list[str] = []
+    for item in evidence[:limit]:
+        if isinstance(item, dict):
+            parts.append(f"{item.get('level','')}:{item.get('source','')}={item.get('evidence','')}")
+        else:
+            parts.append(str(item))
+    return " | ".join(parts)
 
 
 def sample_rows(rows: list[dict[str, str]], per_tier: int, seed: int) -> list[dict[str, str]]:

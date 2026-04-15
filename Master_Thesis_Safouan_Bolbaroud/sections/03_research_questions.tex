@@ -2,15 +2,15 @@
 \label{ch:research-questions}
 
 \section{Main research question}
-In mature open-source projects with documented security incidents, is there a traceable relationship between the rise of AI-generated code contributions and changes in technical debt, code review dynamics, and security outcomes?
+In mature open-source projects with documented security incidents, are detectable AI-assisted contributions associated with different technical debt proxies, review dynamics, and security-traceability patterns than non-AI-signaled contributions?
 
 \section{Sub-questions}
 \begin{enumerate}
-    \item \textbf{RQ1: Detection.} To what extent are AI-generated contributions identifiable in the selected projects, and what is their prevalence over time?
-    \item \textbf{RQ2: Technical debt.} How have technical debt indicators and code quality metrics changed in the selected projects since the widespread availability of AI coding tools, and do AI-flagged contributions show different debt profiles than human-authored code?
-    \item \textbf{RQ3: Security outcomes.} Can documented vulnerabilities be traced to contribution and review pathways involving AI-flagged code?
-    \item \textbf{RQ4: Developer perspectives.} How do maintainers describe the effects of AI-assisted contributions on review burden, quality control, and security?
+    \item \textbf{RQ1: Detection.} To what extent are detectable AI-assisted contributions identifiable in the selected projects, and what is their observable prevalence over time?
+    \item \textbf{RQ2: Technical debt and review.} How do AI-signaled and non-AI-signaled contributions differ in technical debt proxies and review indicators, and how do those indicators differ between the pre-2022 and post-2022 periods?
+    \item \textbf{RQ3: Security traceability.} Can documented vulnerabilities be traced to contribution and review pathways involving AI-signaled code, and what observable review characteristics accompany those pathways?
+    \item \textbf{RQ4: Public discourse.} How do maintainers and contributors describe and frame the effects of AI-assisted contributions on review burden, quality control, and security in public repository discussion?
 \end{enumerate}
 
 \section{Analytical flow}
-\textit{Explain how RQ1 establishes observability, RQ2 evaluates technical debt and quality patterns, RQ3 investigates security outcomes, and RQ4 interprets the mechanisms behind those findings.}
+The analytical flow of the thesis is sequential. RQ1 establishes what can be observed by constructing a labelled dataset of detectable AI-assisted pull requests. RQ2 then compares AI-signaled and non-AI-signaled contributions using maintainability and review indicators, while also placing the post-2022 period against a pre-2022 baseline. RQ3 narrows the focus to security-relevant traceability by linking published vulnerabilities to fix commits, pull requests, and their observable review characteristics. RQ4 interprets these quantitative patterns through public repository discourse, showing how maintainers and contributors describe, justify, or problematize AI-assisted development in practice.

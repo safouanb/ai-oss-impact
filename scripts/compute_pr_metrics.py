@@ -210,7 +210,13 @@ def metrics_from_bundle(bundle: dict, label_row: dict | None) -> dict:
         confidence_tier = label_row.get("confidence_tier", "none")
         confidence_score = float(label_row.get("confidence_score", 0.0))
         evidence = json.loads(label_row.get("evidence_json") or "[]")
-        aidev_sourced = any(s.get("source") == "aidev_dataset" for s in evidence)
+        # evidence_json is either a list of dicts {level, source, evidence}
+        # (detect_ai_contributions.py schema) or a flat list of strings like
+        # ["aidev:Copilot"] (fetch_aidev.py wide-schema merge).
+        aidev_sourced = any(
+            (s.get("source") == "aidev_dataset" if isinstance(s, dict) else str(s).startswith("aidev:"))
+            for s in evidence
+        )
 
     return {
         "pr_number": pr_num,
